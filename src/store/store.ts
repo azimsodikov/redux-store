@@ -18,7 +18,6 @@ export class Store {
   }
 
   subscribe(fn) {
-    console.log(':::', fn);
     this.subscribers = [...this.subscribers, fn];
     this.notify();
     // Once function gets called, it will immedietly unsubscribe this function
