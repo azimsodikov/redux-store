@@ -1,10 +1,11 @@
+import * as fromActions from './actions';
 /**
  * Objcet is gonna hold initial state of the appliation
  */
 export const initialState = {
   loaded: false,
   loading: false,
-  data: [[{label: 'Eat pizza', complete: false}]]
+  data: [{label: 'Eat pizza', complete: false}]
 };
 
 /**
@@ -14,7 +15,7 @@ export const initialState = {
  */
 export function reducer(state = initialState, action: {type: string; payload: any}) {
   switch (action.type) {
-    case 'ADD_TODO': {
+    case fromActions.ADD_TODO: {
       // Do the action here
       const todo = action.payload;
       // Compose new array from todos
@@ -23,6 +24,17 @@ export function reducer(state = initialState, action: {type: string; payload: an
       return {
         ...state,
         data: data
+      }
+    }
+    case fromActions.REMOVE_TODO: {
+      // Filter out removed to do
+      const data = state.data.filter(
+        todo => todo.label !== action.payload.label
+      );
+      // Return new data
+      return {
+        ...state,
+        data
       }
     }
   }

@@ -7,6 +7,7 @@ export class Store {
   private state: {[key: string]: any};
 
   constructor(reducers = {}, initialState = {}) {
+    this.subscribers = [];
     this.reducers = reducers;
     this.state = this.reduce(initialState, {});
   }
@@ -16,9 +17,27 @@ export class Store {
     return this.state;
   }
 
+  subscribe(fn) {
+    console.log(':::', fn);
+    this.subscribers = [...this.subscribers, fn];
+    this.notify();
+    // Once function gets called, it will immedietly unsubscribe this function
+    return () => {
+      this.subscribers = this.subscribers.filter(sub => sub !== fn)
+    }
+  }
+
   dispatch(action) {
     // Update entire state object by calling the reduce function and iterate over
     this.state = this.reduce(this.state, action);
+    this.notify();
+
+  }
+
+
+  private notify() {
+    // Every time subscribe is called we gonna let subscribers know that there is change and pass down the new state
+    this.subscribers.forEach(fn => fn(this.value));
   }
 
   private reduce(state, action) {
