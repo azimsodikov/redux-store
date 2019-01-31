@@ -1,6 +1,11 @@
 const span = document.querySelector('span') as HTMLSpanElement;
 const todoList = document.querySelector('.todos') as HTMLLIElement;
 
+
+/**
+ * Takes the collection of to do's and renders the view
+ * @param collection todo list
+ */
 export function renderTodos(collection) {
   span.innerHTML = collection.length;
   todoList.innerHTML = '';

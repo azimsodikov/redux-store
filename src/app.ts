@@ -1,10 +1,27 @@
+import * as fromStore from "./store";
+
 import { renderTodos } from './utils';
 
 const input = document.querySelector('input') as HTMLInputElement;
+// reference to the button
 const button = document.querySelector('button') as HTMLButtonElement;
 const destroy = document.querySelector('.unsubscribe') as HTMLButtonElement;
 const todoList = document.querySelector('.todos') as HTMLLIElement;
 
+
+const reducers = {
+  todos: fromStore.reducer
+}
+
+/**
+ * We created Store object and created new instance with initial state value
+ * Reducer is gonna provide the intitial state
+ */
+const store = new fromStore.Store(reducers)
+
+/**
+ * Button gets the value from the input and creates payload
+ */
 button.addEventListener(
   'click',
   () => {
@@ -12,7 +29,12 @@ button.addEventListener(
 
     const payload = { label: input.value, complete: false };
 
-    console.log(payload);
+    store.dispatch({
+      type: 'ADD_TODO',
+      payload: payload
+    });
+
+    console.log(store.value);
 
     input.value = '';
   },

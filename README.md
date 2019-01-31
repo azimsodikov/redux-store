@@ -1,50 +1,110 @@
-<h1 align="center">Simple Redux Store</h1>
-<h4 align="center">Vanilla TypeScript example of a Redux Store</h4>
 
----
+#### What is application state
+  * Server response data : Basic CRUD operations in the store
+  * User informtaion : Access levels, enrollments for particular user
+  * User input : Forms, inputs and also considered application state
+  * UI state : We might have a particular toggle or dropdown 
+  * Router/location state : URL bar is a source of truth
 
-<a href="https://ultimateangular.com" target="_blank"><img src="https://ultimateangular.com/assets/img/banners/ua-github.svg"></a>
 
----
+  'We compose application state in our Store'
 
-> This repo serves as the seed project for the Ultimate Angular NGRX Store + Effects course, as well as stepped solutions in separate branches, come and [learn NGRX](https://ultimateangular.com/ngrx-store-effects) with us!
+#### State Managment Libraries 
+  * Model our app state
+  * Update state
+  * Read state values 
+  * Monitor/observe changes to state
 
-## Prerequisites
+#### Redux: Three Principles
+1. Single source of truth
+    * One state tree inside Store - State for entire application lives in one place;
+    * Predictability, maintainability - Since state is located in one place it is much more predictable;
+    * Universal apps (SSR) - On the server we can create state represantation of the UI since it is the single object, so we have full represantation of the UI ready when it is rendered, instead of having multiple http calls;
+    * Testing and debugging - It will allow us to use time travel debugging and easier to test since it is the pure functions
 
-* Install [Node.js](https://nodejs.org/en/download/)
+2. State is read-only
+    * Derive properties from state - We are not allowed to overwrite or mutate the state, it is read only;
+    * Dispatch actions to change the state - Only way to change the state is dispatch the action;
+    * Immutable updates patterns - Instead of mutating the current object return new object;
 
-* Install TypeScript
+3. Pure functions update state
+    * Pure functions are reducers - Given the same input should return the same output, it does not mutate the object or access the properties;
+    * Reducers respond to action types - Pure function are called reducers and only responds to predefined action types; ex. ADD_TODO only adds to do to the array and returns new array;
+    * Reducers return new state - When new state is returned all the subscribed components will get that new state;
 
-```bash
-npm install -g typescript
-```
+#### Redux: Core Concepts
+ * Single state tree 
+    - Plain JS Object
+    - Composed by reducers
 
-* Install Yarn (optional)
+ * Actions
+    - Two properties: 
+      * type: string, describes event
+      * payload: optional data
+    - Dispatch actions to reducers
 
-If you want to roll with npm, feel free to do so. If you'd like to try Yarn, run the following or [another installation method](https://yarnpkg.com/lang/en/docs/install/):
+ * Reducers
+    - Pure functions
+    - Given dispatched action
+      * Responds to action.type
+      * Access to action.payload
+      * Composes new state
+      * Returns new state
 
-```bash
-npm install -g yarn
-```
+ * Store
+    - State container
+    - Components interact with Store
+      * Subscribe to slices of State
+      * Dispatch Actions to the Store
+    - Store invokes Reducers with previous State and Action
+    - Reducers compose new State 
+    - Store is updated, notifies subscribers
 
-## Setup
+ * One way data flow
 
-#### Installing dependencies
+    ![alt text](./assets/OneWayDF.png)
 
-```bash
-cd <redux-store-project>
+#### Understanding Immutability
+  * An immutable object is an object whose state cannot be mofified after creation. Instead of adding property to existing object, we get the copy of the object and add the property and return that object;
 
-yarn install
-# OR
-npm install
-```
+  * Why Immutability?
+    - Predictability
+    - Explicit state changes
+    - Performance (Change Detection)
+    - Mutation Tracking
+    - Undo state changes
 
-#### Local server
+  * Mutability in JS (Mutable by nature), we need to start thinking in immutable way
+    - Functions
+    - Objects
+    - Array
 
-```bash
-yarn start
-# OR
-npm start
-```
+    ```
+    //Objects
+    const character = {name: 'Has Solo'};
+    Object.assign({}, character, {role: 'Captain'});
+    const updatedCharacter = {...character, role: 'Captain'};
+    // {name : 'Han Solo'};
+    console.log(character):
+    // {name : 'Han Solo', role: 'Captain'};
+    console.log(updatedCharacter):
 
-Visit [localhost:8000](localhost:8000) in your browser.
+    // Arrays
+    const names = ['Han Solo', 'Darth Vader'];
+    const newNames = [...names, 'R2-D2'];
+    // ['Han Solo', 'Darth Vader'];
+    console.log(names);
+    // ['Han Solo', 'Darth Vader', 'R2-D2'];
+    console.log(newNames);
+    ```
+  * Immutable data types in JS
+    - string: 
+    ```
+    const name = 'Han Solo'
+    const uppercaseName = name.toUpperCase()
+    // 'Han Solo', 'HAN SOLO'
+    console.log(name, uppercaseName)
+    ```
+
+
+
